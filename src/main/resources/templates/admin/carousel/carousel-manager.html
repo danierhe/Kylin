@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <css th:replace="utils/meta-ui-inc::meta"></css>
+</head>
+<body>
+<div class="layui-fluid">
+    <!--1-->
+    <div class="layui-row">
+        <div class="layui-col-md3">
+            <div class="layui-row">
+                <div class="layui-col-md3">
+                    <button type="button" class="layui-btn" id="uploadFile1">
+                        <i class="layui-icon">&#xe67c;</i>上传图片
+                    </button>
+                </div>
+                <div class="layui-col-md9">
+                    <img id="p1" src="" width="300px">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-col-md3">
+            <div class="layui-row">
+                <div class="layui-col-md3">
+                    <button type="button" class="layui-btn" id="uploadFile2">
+                        <i class="layui-icon">&#xe67c;</i>上传图片
+                    </button>
+                </div>
+                <div class="layui-col-md9">
+                    <img id="p2" src="" width="300px">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-col-md3">
+            <div class="layui-row">
+                <div class="layui-col-md3">
+                    <button type="button" class="layui-btn" id="uploadFile3">
+                        <i class="layui-icon">&#xe67c;</i>上传图片
+                    </button>
+                </div>
+                <div class="layui-col-md9">
+                    <img id="p3" src="" width="300px">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<javascript th:replace="utils/js-inc::js"></javascript>
+<script>
+    layui.use(['layer','table','jquery','form','carousel','upload'],function () {
+        var layer=layui.layer
+            ,$=layui.$
+            ,upload=layui.upload;
+
+        var ret = postData("/files/getFilesByFileTypeAndRemarks",{"fileType":"carousel"});
+        if(ret.code==200){
+            var list = ret.data;
+            if(list.length>0){
+                for(var i=0;i<list.length;i++){
+                    if("first"==list[i].remarks){
+                        $("#p1").attr("src","images"+list[i].filePath);
+                    }else if("second"==list[i].remarks){
+                        $("#p2").attr("src","images"+list[i].filePath);
+                    }else if("third"==list[i].remarks){
+                        $("#p3").attr("src","images"+list[i].filePath);
+                    }
+                }
+            }
+        }else{
+            layer.alert(ret.msg);
+        }
+
+
+
+
+
+
+
+        upload.render({
+            elem:'#uploadFile1'
+            ,url:'/files/uploadPictures'
+            ,accept:'file'
+            ,size:1024*2
+            ,data:{
+                fileType:"carousel"
+                ,remarks:"first"
+            }
+            ,done:function (res) {
+                if(res.code==200){
+                    $("#p1").attr("src",res.data);
+                }else{
+                    layer.msg(res.msg);
+                }
+            }
+        });
+
+        upload.render({
+            elem:'#uploadFile2'
+            ,url:'/files/uploadPictures'
+            ,accept:'file'
+            ,size:1024*2
+            ,data:{
+                fileType:"carousel"
+                ,remarks:"second"
+            }
+            ,done:function (res) {
+                if(res.code==200){
+                    $("#p2").attr("src",res.data);
+                }else{
+                    layer.msg(res.msg);
+                }
+            }
+        });
+
+        upload.render({
+            elem:'#uploadFile3'
+            ,url:'/files/uploadPictures'
+            ,accept:'file'
+            ,size:1024*2
+            ,data:{
+                fileType:"carousel"
+                ,remarks:"third"
+            }
+            ,done:function (res) {
+                if(res.code==200){
+                    $("#p3").attr("src",res.data);
+                }else{
+                    layer.msg(res.msg);
+                }
+            }
+        });
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <css th:replace="utils/meta-ui-inc::meta"></css>
+    <style type="text/css">
+        body {
+            background-image: url(/static/imgs/index-bg.jpg);
+            background-attachment: fixed;
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
+
+        .layui-fluid{
+            text-align: center;
+        }
+        .layui-table{
+            margin: auto;
+            width: 434px;
+            margin-top: 10%;
+            border-radius:25px;
+        }
+    </style>
+</head>
+<body>
+    <div class="layui-fluid" style="opacity: 0.9">
+        <form class="layui-form" id="loginForm" lay-filter="login">
+            <table class="layui-table" lay-skin="nob" lay-size="sm">
+                <tr>
+                    <td>
+                        用户登录
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">账号：</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="userName" required lay-verify="required" placeholder="请输入登录账号" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">密码：</label>
+                            <div class="layui-input-inline">
+                                <input type="password" name="password" required lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input" >
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <a class="layui-btn" href="javascript:void(0);" onclick="userLogin()">登&nbsp;&nbsp;&nbsp;&nbsp;录</a>
+                        <a class="layui-btn layui-btn-primary"  href="javascript:void(0);" onclick="toRegister();">注&nbsp;&nbsp;&nbsp;册</a>
+                    </td>
+                </tr>
+            </table>
+
+
+        </form>
+    </div>
+<javascript th:replace="utils/js-inc::js"></javascript>
+<script>
+
+    layui.use(['jquery','layer'],function () {
+        var $=layui.$,layer=layui.layer;
+        window.userLogin = function () {
+            var ret = postData("/login/userLogin",$("#loginForm").serialize());
+            if(ret.code==200){
+                //成功！
+                href("/work")
+            }else{
+                layer.msg(ret.msg);
+            }
+        }
+    })
+
+    function toRegister() {
+        href("/users/user-register");
+    }
+</script>
+</body>
+</html>
