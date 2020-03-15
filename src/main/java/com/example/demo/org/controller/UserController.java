@@ -1,7 +1,7 @@
 package com.example.demo.org.controller;
 
 import com.example.demo.base.BaseController;
-import com.example.demo.org.pojo.Users;
+import com.example.demo.org.pojo.User;
 import com.example.demo.org.service.UserService;
 import commons.MD5;
 import commons.PageBean;
@@ -29,14 +29,14 @@ public class UserController extends BaseController {
 
 
     @RequestMapping("/saveUser")
-    public Map saveUser(Users users){
+    public Map saveUser(User users){
         try {
             //判断用户注册手机号和邮件是否存在
-            Users phones = userService.getUserByPhone(users.getPhone());
+            User phones = userService.getUserByPhone(users.getPhone());
             if(phones!=null){
                 return error("手机号已存在！");
             }
-            Users emails = userService.getUserByEmail(users.getEmail());
+            User emails = userService.getUserByEmail(users.getEmail());
             if(emails!=null){
                 return error("邮箱已存在！");
             }
@@ -63,7 +63,7 @@ public class UserController extends BaseController {
 
     @RequestMapping("/getUserById")
     public Map getUserById(String userId){
-        Users user = userService.getUserById(userId);
+        User user = userService.getUserById(userId);
         return showSucc(user);
     }
 
@@ -75,7 +75,7 @@ public class UserController extends BaseController {
     }
 
     @RequestMapping("/getUserPage")
-    public Map getUserPage(PageBean<Users> pageBean,String searchParam){
+    public Map getUserPage(PageBean<User> pageBean,String searchParam){
         pageBean = userService.getUserPage(pageBean,searchParam);
         return showLayTale(pageBean);
     }

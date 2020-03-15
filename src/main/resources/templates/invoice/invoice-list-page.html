@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <css th:replace="utils/meta-ui-inc::meta"></css>
+</head>
+<body>
+<div class="layui-fluid">
+    <br>
+    <div>
+        <!--查询框-->
+        <form class="layui-form">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">是否报销：</label>
+                    <div class="layui-input-inline">
+                        <select id="type">
+                            <option value="">请选择</option>
+                            <option value="1">未报销</option>
+                            <option value="2">已报销</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="layui-inline">
+                    <div class="layui-input-inline">
+                        <input type="text" autocomplete="off" class="layui-input" placeholder="请输入报销项目或备注" id="seachParam"/>
+                    </div>
+                    <div class="layui-input-inline">
+                        <a href="javascript:void(0);" class="layui-btn" id="searchBtn" data-type="reload">搜索</a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="">
+        <!-- table框 -->
+        <table class="layui-table" id="invoice_list_table_id" lay-filter="invoice_list_table_filter"></table>
+        <script type="text/html" id="barDemo">
+            <a class="layui-btn layui-btn-xs" lay-event="edit">查看</a>
+            <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+        </script>
+    </div>
+</div>
+<javascript th:replace="utils/js-inc::js"></javascript>
+<script>
+    layui.use(['layer','jquery','table','form'],function () {
+        var layer = layui.layer,$=layui.$,table=layui.table,form=layui.form;
+
+        table.render({
+            elem:'#invoice_list_table_id',
+            url:'/invoice/getInvoiceListPage',
+            where:{
+                type:$("#type").val(),
+                projectName:$("#seachParam").val()
+            },
+            toolbar:'default',
+            id:'invoice_list_table',
+            totalRow:true,
+            cols:[
+                [
+                    {field:'xuhao',type:'numbers',title:'序号',width:80},
+                    {field:'projectName',title:'报销项目',width:460,unresize: true, sort: true, totalRowText: '合计'},
+                    {field:'totalValue',title:'报销总金额',width:150,totalRow:true},
+                    {field:'type',title:'是否报销',width:100},
+                    {field:'applyTime',title:'申请时间',width:150},
+                    {field:'overTime',title:'报销时间',width:150},
+                    {field:'remarks',title:'报销备注'},
+                ]
+            ],
+            page:true,
+            even:true,
+            done:function () {
+                $("[data-field='type']").children().each(function () {
+                    if($(this).text() =='1'){
+                        $(this).text("未报销");
+                    }else if($(this).text() =='2'){
+                        $(this).text("已报销");
+                    }
+                });
+            }
+        });
+        
+        var active={
+            reload:function () {
+                var type=$("#type").val();
+                var projectName=$("#seachParam").val();
+                table.reload('invoice_list_table',{
+                    page:{
+                        curr:1
+                    },
+                    where:{
+                        type:type,
+                        projectName:projectName,
+                    }
+                });
+            }
+        }
+        //搜索按钮
+        $('#searchBtn').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+        table.on('toolbar(invoice_list_table_filter)',function (obj) {
+            var checkStatus = table.checkStatus(obj.config.id);
+            switch(obj.event){
+                case 'add':
+                    href("/invoice/to-invoice-list-add");
+                    break;
+                case 'delete':
+                    layer.msg('该功能暂未开放！');
+                    break;
+                case 'update':
+                    layer.msg('该功能暂未开放！');
+                    break;
+            };
+        });
+
+
+
+    });
+</script>
+</body>
+</html>

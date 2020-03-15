@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.cyclopedia.mapper.CyclopediasMapper">
+  <resultMap id="BaseResultMap" type="com.example.demo.cyclopedia.pojo.Cyclopedias">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="key_word" jdbcType="VARCHAR" property="keyWord" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="self_intro" jdbcType="VARCHAR" property="selfIntro" />
+    <result column="photo_url" jdbcType="VARCHAR" property="photoUrl" />
+    <result column="remarks" jdbcType="VARCHAR" property="remarks" />
+    <result column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="company_id" jdbcType="VARCHAR" property="companyId" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="craete_time" jdbcType="VARCHAR" property="craeteTime" />
+    <result column="update_time" jdbcType="VARCHAR" property="updateTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, key_word, name, self_intro, photo_url, remarks, user_id, company_id, status, 
+    craete_time, update_time
+  </sql>
+  <select id="selectByExample" parameterType="com.example.demo.cyclopedia.pojo.CyclopediasExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from cyclopedias
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from cyclopedias
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from cyclopedias
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.example.demo.cyclopedia.pojo.CyclopediasExample">
+    delete from cyclopedias
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.example.demo.cyclopedia.pojo.Cyclopedias">
+    insert into cyclopedias (id, key_word, name, 
+      self_intro, photo_url, remarks, 
+      user_id, company_id, status, 
+      craete_time, update_time)
+    values (#{id,jdbcType=VARCHAR}, #{keyWord,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{selfIntro,jdbcType=VARCHAR}, #{photoUrl,jdbcType=VARCHAR}, #{remarks,jdbcType=VARCHAR}, 
+      #{userId,jdbcType=VARCHAR}, #{companyId,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, 
+      #{craeteTime,jdbcType=VARCHAR}, #{updateTime,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.demo.cyclopedia.pojo.Cyclopedias">
+    insert into cyclopedias
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="keyWord != null">
+        key_word,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="selfIntro != null">
+        self_intro,
+      </if>
+      <if test="photoUrl != null">
+        photo_url,
+      </if>
+      <if test="remarks != null">
+        remarks,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="companyId != null">
+        company_id,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="craeteTime != null">
+        craete_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="keyWord != null">
+        #{keyWord,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="selfIntro != null">
+        #{selfIntro,jdbcType=VARCHAR},
+      </if>
+      <if test="photoUrl != null">
+        #{photoUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="remarks != null">
+        #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="companyId != null">
+        #{companyId,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="craeteTime != null">
+        #{craeteTime,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.example.demo.cyclopedia.pojo.CyclopediasExample" resultType="java.lang.Long">
+    select count(*) from cyclopedias
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update cyclopedias
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.keyWord != null">
+        key_word = #{record.keyWord,jdbcType=VARCHAR},
+      </if>
+      <if test="record.name != null">
+        name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.selfIntro != null">
+        self_intro = #{record.selfIntro,jdbcType=VARCHAR},
+      </if>
+      <if test="record.photoUrl != null">
+        photo_url = #{record.photoUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remarks != null">
+        remarks = #{record.remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userId != null">
+        user_id = #{record.userId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.companyId != null">
+        company_id = #{record.companyId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=VARCHAR},
+      </if>
+      <if test="record.craeteTime != null">
+        craete_time = #{record.craeteTime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateTime != null">
+        update_time = #{record.updateTime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update cyclopedias
+    set id = #{record.id,jdbcType=VARCHAR},
+      key_word = #{record.keyWord,jdbcType=VARCHAR},
+      name = #{record.name,jdbcType=VARCHAR},
+      self_intro = #{record.selfIntro,jdbcType=VARCHAR},
+      photo_url = #{record.photoUrl,jdbcType=VARCHAR},
+      remarks = #{record.remarks,jdbcType=VARCHAR},
+      user_id = #{record.userId,jdbcType=VARCHAR},
+      company_id = #{record.companyId,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=VARCHAR},
+      craete_time = #{record.craeteTime,jdbcType=VARCHAR},
+      update_time = #{record.updateTime,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.demo.cyclopedia.pojo.Cyclopedias">
+    update cyclopedias
+    <set>
+      <if test="keyWord != null">
+        key_word = #{keyWord,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="selfIntro != null">
+        self_intro = #{selfIntro,jdbcType=VARCHAR},
+      </if>
+      <if test="photoUrl != null">
+        photo_url = #{photoUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="remarks != null">
+        remarks = #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="companyId != null">
+        company_id = #{companyId,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="craeteTime != null">
+        craete_time = #{craeteTime,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.demo.cyclopedia.pojo.Cyclopedias">
+    update cyclopedias
+    set key_word = #{keyWord,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      self_intro = #{selfIntro,jdbcType=VARCHAR},
+      photo_url = #{photoUrl,jdbcType=VARCHAR},
+      remarks = #{remarks,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=VARCHAR},
+      company_id = #{companyId,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      craete_time = #{craeteTime,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <!-- 通过关键字查询百科-->
+  <select id="selectCyclopediasByKeyWord" parameterType="java.lang.String" resultType="com.example.demo.cyclopedia.pojo.Cyclopedias">
+    select * from cyclopedias where status=1 and key_word like concat('%',#{keyWord},'%')
+  </select>
+
+</mapper>

@@ -1,6 +1,9 @@
 package com.example.demo.base;
 
+import com.example.demo.base.conf.LoginUser;
 import commons.PageBean;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,6 +16,17 @@ import java.util.Map;
 public class BaseController {
     public static final String USABLE_STATUS="1";//可以
     public static final String DELETE_STATUS="0";//删除，不可用
+
+    public LoginUser loginUser;
+
+    protected LoginUser getLoginUser(){
+        LoginUser loginUser = new LoginUser();
+        loginUser.setUserId("000000");
+        loginUser.setCompanyId("000000");
+        loginUser.setUserName("张艳丽");
+        return loginUser;
+    }
+
 
     protected Map error(String msg){
         Map<String,String> map = new HashMap<>();

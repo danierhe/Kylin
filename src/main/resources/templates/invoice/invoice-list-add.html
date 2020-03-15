@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <css th:replace="utils/meta-ui-inc::meta"></css>
+</head>
+<body>
+<div class="layui-fluid">
+    <br/>
+    <form class="layui-form layui-form-pane" id="listForm">
+        <input type="hidden" id="uuid1" name="id" th:value="${oldListId}"/>
+        <div class="layui-form-item">
+            <label class="layui-form-label">报销项目：</label>
+            <div class="layui-input-block">
+                <input type="text" name="projectName" lay-verify="required" autocomplete="off" placeholder="请填写报销项目" class="layui-input"/>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">报销状态：</label>
+                <div class="layui-input-inline">
+                    <select name="type">
+                        <option value="1">未报销</option>
+                        <option value="2">已报销</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">报销金额：</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="totalValue" class="layui-input" readonly/>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <table class="layui-table" id="detail-table-id" lay-filter="detail-table-filter"></table>
+        </div>
+
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">备注：</label>
+            <div class="layui-input-block">
+                <textarea placeholder="请输入备注内容！" class="layui-textarea" name="remarks"></textarea>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <a href="javascript:void(0);" class="layui-btn" lay-submit="" lay-filter="submit1">提&nbsp;&nbsp;&nbsp;&nbsp;交</a>
+            <a href="javascript:void(0);" class="layui-btn layui-btn-primary" id="backPage">返&nbsp;&nbsp;&nbsp;&nbsp;回</a>
+        </div>
+    </form>
+</div>
+<div id="detailDiv" style="display: none">
+    <br/>
+    <div class="layui-fluid">
+        <form class="layui-form layui-form-pane" id="detailForm">
+            <input type="hidden" id="uuid2" name="listId"/>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">发票号：</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="invoiceNumber" lay-verify="required" autocomplete="off" placeholder="请输入发票号" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">发票金额：</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="invoiceValue" lay-verify="number" autocomplete="off" placeholder="请输入发票金额" class="layui-input">
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">发票类型：</label>
+                    <div class="layui-input-inline">
+                        <select name="invoiceType" lay-verify="required">
+                            <option value="1">普票</option>
+                            <option value="2">专票</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">报销种类：</label>
+                    <div class="layui-input-inline">
+                        <select name="type" lay-verify="required">
+                            <option value="1">餐费</option>
+                            <option value="2">交通费</option>
+                            <option value="3">住宿费</option>
+                            <option value="4">其他</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">工作类型：</label>
+                    <div class="layui-input-inline">
+                        <select name="businessType" lay-verify="required">
+                            <option value="1">加班</option>
+                            <option value="2">出差</option>
+                            <option value="3">补贴</option>
+                            <option value="4">其他</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">开票时间：</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="eatTime" id="date" lay-verify="date" autocomplete="off" placeholder="请选择开票时间" class="layui-input"/>
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">报销人：</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="ownName" lay-verify="required" autocomplete="off" placeholder="请填写报销人" class="layui-input"/>
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">备注：</label>
+                <div class="layui-input-block">
+                    <textarea placeholder="请输入备注内容！"  class="layui-textarea" name="remarks"></textarea>
+                </div>
+            </div>
+
+            <div class="layui-form-item" style="text-align: center">
+                <a href="javascript:void(0);" class="layui-btn" lay-submit="" lay-filter="submit2">提&nbsp;&nbsp;&nbsp;&nbsp;交</a>
+                <a href="javascript:void(0);" class="layui-btn layui-btn-primary">取&nbsp;&nbsp;&nbsp;&nbsp;消</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<javascript th:replace="utils/js-inc::js"></javascript>
+<script>
+    var listId;
+    layui.use(['form','table','layer','jquery','laydate'],function () {
+        var form=layui.form,table=layui.table,layer=layui.layer,$=layui.$,laydate=layui.laydate;
+        form.render();
+        laydate.render({
+            elem:'#date'
+        });
+        listId = $("#uuid1").val();
+
+        form.on('submit(submit1)',function () {
+            var ret = postData("/invoice/saveInvoiceList",$("#listForm").serialize());
+            if(ret.code==200){
+                layer.msg("操作成功！");
+                href("/invoice/to-invoice-list-page")
+            }else{
+                layer.alert(ret.msg);
+            }
+        })
+
+        if(listId=="" || null == listId){
+            listId=guid();
+        }
+        $("#uuid1").val(listId);
+        $("#uuid2").val(listId);
+
+        table.render({
+            elem:'#detail-table-id',
+            url:'/invoice/getInvoiceDetailPage',
+            toolbar:'default',
+            title:'发票详情表',
+            id:'detail_table',
+            where:{
+                listId:listId,
+            },
+            cols:[
+                [
+                    {type:'checkbox'},
+                    {field:'invoiceNumber',title:'发票号',width:180},
+                    {field:'invoiceValue',title:'发票金额',width:160},
+                    {field:'eatTime',title:'开票时间',width:200},
+                    {field:'invoiceType',title:'发票类型',width:160},
+                    {field:'type',title:'报销类型',width:160},
+                    {field:'businessType',title:'报销类别',width:160},
+                    {field:'ownName',title:'报销人',width:160},
+                    {field:'remarks',title:'备注'},
+                ]
+            ],
+            page:true,
+            done:function () {
+                $("[data-field='invoiceType']").children().each(function () {
+                    if($(this).text() =='1'){
+                        $(this).text("普票");
+                    }else if($(this).text() =='2'){
+                        $(this).text("专票");
+                    }
+                });
+                $("[data-field='type']").children().each(function () {
+                    if($(this).text() =='1'){
+                        $(this).text("餐费");
+                    }else if($(this).text() =='2'){
+                        $(this).text("交通费");
+                    }else if($(this).text() =='3'){
+                        $(this).text("住宿费");
+                    }else if($(this).text() =='4'){
+                        $(this).text("其他");
+                    }
+                });
+                $("[data-field='businessType']").children().each(function () {
+                    if($(this).text() =='1'){
+                        $(this).text("加班");
+                    }else if($(this).text() =='2'){
+                        $(this).text("出差");
+                    }else if($(this).text() =='3'){
+                        $(this).text("补助");
+                    }else if($(this).text() =='4'){
+                        $(this).text("其他");
+                    }
+                });
+            }
+        });
+
+        table.on('toolbar(detail-table-filter)',function (obj) {
+            var checkStatus = table.checkStatus(obj.config.id);
+            switch(obj.event){
+                case 'add':
+                    layer.open({
+                        type:1,
+                        title:'新增信息',
+                        skin:'layui-layer-rim',
+                        area:['700px','500px'],
+                        offset:'100px',
+                        content:$('#detailDiv'),
+                    });
+                    break;
+                case 'delete':
+                    layer.msg('该功能暂未开放！');
+                    break;
+                case 'update':
+                    layer.msg('该功能暂未开放！');
+                    break;
+            };
+        });
+        var active={
+            reload:function () {
+                table.reload('detail_table',{
+                    page:{
+                        curr:1
+                    },
+                    where:{
+                        listId:listId,
+                    }
+                });
+            }
+        };
+        form.on('submit(submit2)',function () {
+            var ret = postData("/invoice/saveInvoiceDetail",$("#detailForm").serialize());
+            if(ret.code==200){
+                layer.msg("操作成功！");
+                $("#detailForm")[0].reset();
+                $("#uuid2").val(listId);
+                active.reload();
+                layer.closeAll();
+            }else{
+                layer.alert(ret.msg);
+            }
+        });
+
+
+        $("#backPage").click(function () {
+            href("/invoice/to-invoice-list-page");
+        });
+    });
+</script>
+</body>
+</html>

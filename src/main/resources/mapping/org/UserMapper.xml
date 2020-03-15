@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.example.demo.org.mapper.UsersMapper">
-  <resultMap id="BaseResultMap" type="com.example.demo.org.pojo.Users">
+<mapper namespace="com.example.demo.org.mapper.UserMapper">
+  <resultMap id="BaseResultMap" type="com.example.demo.org.pojo.User">
     <id column="id" jdbcType="VARCHAR" property="id" />
     <result column="user_code" jdbcType="VARCHAR" property="userCode" />
     <result column="user_name" jdbcType="VARCHAR" property="userName" />
@@ -12,6 +12,7 @@
     <result column="birthday" jdbcType="VARCHAR" property="birthday" />
     <result column="role_id" jdbcType="VARCHAR" property="roleId" />
     <result column="dept_id" jdbcType="VARCHAR" property="deptId" />
+    <result column="company_id" jdbcType="VARCHAR" property="companyId" />
     <result column="user_status" jdbcType="VARCHAR" property="userStatus" />
     <result column="photo_url" jdbcType="VARCHAR" property="photoUrl" />
     <result column="brief_introduction" jdbcType="VARCHAR" property="briefIntroduction" />
@@ -80,8 +81,24 @@
   </sql>
   <sql id="Base_Column_List">
     id, user_code, user_name, phone, email, password, sex, birthday, role_id, dept_id, 
-    user_status, photo_url, brief_introduction, status, create_time, update_time, last_logintime
+    company_id, user_status, photo_url, brief_introduction, status, create_time, update_time, 
+    last_logintime
   </sql>
+  <select id="selectByExample" parameterType="com.example.demo.org.pojo.UserExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from user
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
@@ -92,21 +109,29 @@
     delete from user
     where id = #{id,jdbcType=VARCHAR}
   </delete>
-  <insert id="insert" parameterType="com.example.demo.org.pojo.Users">
+  <delete id="deleteByExample" parameterType="com.example.demo.org.pojo.UserExample">
+    delete from user
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.example.demo.org.pojo.User">
     insert into user (id, user_code, user_name, 
       phone, email, password, 
       sex, birthday, role_id, 
-      dept_id, user_status, photo_url, 
-      brief_introduction, status, create_time, 
-      update_time, last_logintime)
+      dept_id, company_id, user_status, 
+      photo_url, brief_introduction, status, 
+      create_time, update_time, last_logintime
+      )
     values (#{id,jdbcType=VARCHAR}, #{userCode,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, 
       #{phone,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
       #{sex,jdbcType=VARCHAR}, #{birthday,jdbcType=VARCHAR}, #{roleId,jdbcType=VARCHAR}, 
-      #{deptId,jdbcType=VARCHAR}, #{userStatus,jdbcType=VARCHAR}, #{photoUrl,jdbcType=VARCHAR}, 
-      #{briefIntroduction,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{createTime,jdbcType=VARCHAR}, 
-      #{updateTime,jdbcType=VARCHAR}, #{lastLogintime,jdbcType=VARCHAR})
+      #{deptId,jdbcType=VARCHAR}, #{companyId,jdbcType=VARCHAR}, #{userStatus,jdbcType=VARCHAR}, 
+      #{photoUrl,jdbcType=VARCHAR}, #{briefIntroduction,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=VARCHAR}, #{updateTime,jdbcType=VARCHAR}, #{lastLogintime,jdbcType=VARCHAR}
+      )
   </insert>
-  <insert id="insertSelective" parameterType="com.example.demo.org.pojo.Users">
+  <insert id="insertSelective" parameterType="com.example.demo.org.pojo.User">
     insert into user
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -138,6 +163,9 @@
       </if>
       <if test="deptId != null">
         dept_id,
+      </if>
+      <if test="companyId != null">
+        company_id,
       </if>
       <if test="userStatus != null">
         user_status,
@@ -192,6 +220,9 @@
       <if test="deptId != null">
         #{deptId,jdbcType=VARCHAR},
       </if>
+      <if test="companyId != null">
+        #{companyId,jdbcType=VARCHAR},
+      </if>
       <if test="userStatus != null">
         #{userStatus,jdbcType=VARCHAR},
       </if>
@@ -215,7 +246,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.example.demo.org.pojo.UsersExample" resultType="java.lang.Long">
+  <select id="countByExample" parameterType="com.example.demo.org.pojo.UserExample" resultType="java.lang.Long">
     select count(*) from user
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
@@ -253,6 +284,9 @@
       </if>
       <if test="record.deptId != null">
         dept_id = #{record.deptId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.companyId != null">
+        company_id = #{record.companyId,jdbcType=VARCHAR},
       </if>
       <if test="record.userStatus != null">
         user_status = #{record.userStatus,jdbcType=VARCHAR},
@@ -292,6 +326,7 @@
       birthday = #{record.birthday,jdbcType=VARCHAR},
       role_id = #{record.roleId,jdbcType=VARCHAR},
       dept_id = #{record.deptId,jdbcType=VARCHAR},
+      company_id = #{record.companyId,jdbcType=VARCHAR},
       user_status = #{record.userStatus,jdbcType=VARCHAR},
       photo_url = #{record.photoUrl,jdbcType=VARCHAR},
       brief_introduction = #{record.briefIntroduction,jdbcType=VARCHAR},
@@ -303,7 +338,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.example.demo.org.pojo.Users">
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.demo.org.pojo.User">
     update user
     <set>
       <if test="userCode != null">
@@ -333,6 +368,9 @@
       <if test="deptId != null">
         dept_id = #{deptId,jdbcType=VARCHAR},
       </if>
+      <if test="companyId != null">
+        company_id = #{companyId,jdbcType=VARCHAR},
+      </if>
       <if test="userStatus != null">
         user_status = #{userStatus,jdbcType=VARCHAR},
       </if>
@@ -357,7 +395,7 @@
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.example.demo.org.pojo.Users">
+  <update id="updateByPrimaryKey" parameterType="com.example.demo.org.pojo.User">
     update user
     set user_code = #{userCode,jdbcType=VARCHAR},
       user_name = #{userName,jdbcType=VARCHAR},
@@ -368,6 +406,7 @@
       birthday = #{birthday,jdbcType=VARCHAR},
       role_id = #{roleId,jdbcType=VARCHAR},
       dept_id = #{deptId,jdbcType=VARCHAR},
+      company_id = #{companyId,jdbcType=VARCHAR},
       user_status = #{userStatus,jdbcType=VARCHAR},
       photo_url = #{photoUrl,jdbcType=VARCHAR},
       brief_introduction = #{briefIntroduction,jdbcType=VARCHAR},

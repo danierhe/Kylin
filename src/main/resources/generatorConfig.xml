@@ -15,7 +15,7 @@
         </commentGenerator>
 
         <!-- 数据库连接 -->
-        <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://139.9.195.112/zyl" userId="root" password="123">
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://127.0.0.1/zyl" userId="root" password="123456">
         </jdbcConnection>
 
         <!--
@@ -30,23 +30,24 @@
          生成model模型，对应的包路径，以及文件存放路径(targetProject)，targetProject可以指定具体的路径
       也可以使用“MAVEN”来自动生成，这样生成的代码会在target/generatord-source目录下
      -->
-        <javaModelGenerator targetPackage="net.zlw.settle.commons.pojo" targetProject="D:\IdeaProjects\fibrant\src\main\java">
+        <javaModelGenerator targetPackage="com.example.demo.org.pojo" targetProject="D:\IdeaProjects2019.2.4WorkSpace\demo\src\main\java">
             <property name="enableSubPackages" value="true" />
             <!-- 从数据库返回的值被清理前后的空格  -->
             <property name="trimStrings" value="true" />
         </javaModelGenerator>
 
         <!--对应的mapper.xml文件  -->
-        <sqlMapGenerator targetPackage="mapping" targetProject="D:\IdeaProjects\fibrant\src\main\resources">
+        <sqlMapGenerator targetPackage="mapping" targetProject="D:\IdeaProjects2019.2.4WorkSpace\demo\src\main\resources">
             <property name="enableSubPackages" value="true" />
         </sqlMapGenerator>
 
         <!-- 对应的Mapper接口类文件 -->
-        <javaClientGenerator type="XMLMAPPER" targetPackage="net.zlw.settle.commons.mapper" targetProject="D:\IdeaProjects\fibrant\src\main\java">
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.example.demo.org.mapper" targetProject="D:\IdeaProjects2019.2.4WorkSpace\demo\src\main\java">
             <property name="enableSubPackages" value="true" />
         </javaClientGenerator>
 
         <!-- 生成那些表，tableName对应数据库表，domainObjectName对应实体类名 -->
-        <table tableName="file_info" domainObjectName="FileInfo" enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true" selectByExampleQueryId="true"></table>
+        <table tableName="user" domainObjectName="User" enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true" selectByExampleQueryId="true"></table>
+
     </context>
 </generatorConfiguration>

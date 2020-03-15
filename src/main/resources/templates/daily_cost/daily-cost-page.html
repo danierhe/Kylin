@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <css th:replace="utils/meta-ui-inc::meta"></css>
+</head>
+<body>
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+    <legend>日常开销</legend>
+</fieldset>
+<div class="layui-fluid">
+    <br>
+    <div>
+        <form class="layui-form">
+            <div class="layui-form-item">
+                <a href="javascript:void(0);" id="add" class="layui-btn">新增</a>
+            </div>
+            <div class="layui-form-item">
+                <!-- 时间 -->
+                <div class="layui-inline">
+                    <label class="layui-form-label">时间：</label>
+                    <div class="layui-input-inline">
+                        <input id="startTime" placeholder="开始时间" class="layui-input date">
+                    </div>
+                    <div class="layui-form-mid">-</div>
+                    <div class="layui-input-inline">
+                        <input id="endTime" placeholder="结束时间" class="layui-input date">
+                    </div>
+                </div>
+
+                <!-- 内容搜索 -->
+                <div class="layui-inline">
+                    <div class="layui-input-inline">
+                        <input id="searchParam" placeholder="请输入搜索内容" class="layui-input">
+                    </div>
+                    <a href="javascript:void(0);" class="layui-btn" id="searchBtn" data-type="reload">搜索</a>
+                </div>
+
+            </div>
+        </form>
+    </div>
+    <div>
+        <table class="layui-table" id="table" lay-filter="tableFilter"></table>
+        <script type="text/html" id="toolbarDemo">
+            <div class="layui-btn-container">
+                <!--<a href="javascript:void(0)" class="layui-btn layui-btn-sm" lay-event="update">编辑</a>-->
+                <a href="javascript:void(0)" class="layui-btn layui-btn-danger layui-btn-sm" lay-event="delete">删除</a>
+            </div>
+        </script>
+    </div>
+</div>
+
+<div id="addDiv" style="display: none;">
+    <div class="layui-fluid">
+        <br>
+        <form class="layui-form" id="form">
+            <!--内容-->
+            <div class="layui-form-item">
+                <label class="layui-form-label">内容：</label>
+                <div class="layui-input-block">
+                    <input name="name" id="name" placeholder="请输入内容" class="layui-input">
+                </div>
+            </div>
+            <!-- 金额 -->
+            <div class="layui-form-item">
+                <label class="layui-form-label">金额：</label>
+                <div class="layui-input-block">
+                    <input id="costMoney" name="costMoney" placeholder="请填写金额" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">采购时间:</label>
+                <div class="layui-input-block">
+                    <input id="costTime" name="costTime" placeholder="请选择采购时间" class="layui-input date">
+                </div>
+            </div>
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">备注：</label>
+                <div class="layui-input-block">
+                    <textarea id="remarks" name="remarks" placeholder="请输入备注" class="layui-textarea"></textarea>
+                </div>
+            </div>
+            <!--操作-->
+            <div class="layui-form-item" style="text-align: center">
+                <a href="javascript:void(0);" id="save" class="layui-btn">提交</a>
+                <input type="reset" class="layui-btn layui-btn-primary" value="重置">
+            </div>
+        </form>
+    </div>
+</div>
+
+<javascript th:replace="utils/js-inc::js"></javascript>
+<script>
+    layui.use(['table','form','layer','jquery','laydate'],function () {
+        var table=layui.table,form=layui.form.layer=layui.layer,$=layui.$,laydate=layui.laydate;
+        /*laydate.render({
+            elem: '.date'
+        });*/
+        lay('.date').each(function(){
+            laydate.render({
+                elem: this
+                ,trigger: 'click'
+            });
+        });
+        table.render({
+            elem:'#table',
+            url:'/daily_cost/getDailyCostPage',
+            where:{
+              name:$("#searchParam").val(),
+              startTime:$("#startTime").val(),
+              endTime:$("#endTime").val(),
+            },
+            id:'daily_cost_table',
+            totalRow:true,
+            cols:[
+                [
+                    {field:'xuhao',type:'numbers',title:'序号',width:80},
+                    {field:'name',title:'名称',width:320,unresize: true, sort: true, totalRowText: '合计'},
+                    {field:'costMoney',title:'金额',width:100,totalRow:true},
+                    {field:'costTime',title:'时间',width:150},
+                    {field:'createTime',title:'创建时间',width:180},
+                    {field:'remarks',title:'备注'},
+                    {fixed: 'right', title:'操作', toolbar: '#toolbarDemo', width:200}
+                ]
+            ],
+            page:true
+        });
+
+       var active = {
+           reload:function () {
+               var name=$("#searchParam").val();
+               var startTime=$("#startTime").val();
+               var endTime=$("#endTime").val();
+               //执行重载
+               table.reload('daily_cost_table',{
+                   page:{
+                       curr:1//重新载入，从第1页开始
+                   },
+                   where:{
+                       name:name,
+                       startTime:startTime,
+                       endTime:endTime,
+                   }
+               });
+           }
+       };
+       //数据操作
+       table.on('tool(tableFilter)',function (obj) {
+           var data = obj.data;
+           if(obj.event=='update'){
+               //编辑
+               layer.msg("编辑"+data.name);
+           }else if(obj.event=='delete'){
+               //删除
+               layer.confirm('真的删除么?', function(index){
+                   var ret = postData("/daily_cost/deleteDailyCostById",{"id":data.id});
+                   if(ret.code==200){
+                       layer.msg("删除成功！");
+                       active.reload();
+                   }else{
+                       layer.alert(ret.msg);
+                       return;
+                   }
+               });
+           }
+       });
+
+       $("#searchBtn").on('click',function () {
+           var type = $(this).data('type');
+           active[type] ? active[type].call(this) : '';
+       });
+
+       //新增
+       $("#add").click(function () {
+          layer.open({
+             type:1,
+             title:'新增',
+             skin:'layui-layer-rim',
+             area:['700px','390px'],
+             offset:'100px',
+             content:$("#addDiv"),
+          });
+       });
+       //保存
+       $("#save").click(function () {
+           var name=$("#name").val();
+           var costMoney=$("#costMoney").val();
+           var costTime=$("#costTime").val();
+           var remarks = $("#remarks").val();
+           if(name==""){
+               layer.alert("请输入内容！");
+               return false;
+           }
+           if(name.length>100){
+               layer.alert("请输入100字以内的内容！");
+               return false;
+           }
+           //var reg = /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/;
+           var reg = /(^[1-9][0-9]{0,8}([.][0-9]{0,2})?$)|(^0?(\.[0-9]{0,2})?$)/;
+           if(!reg.test(costMoney)){
+               layer.alert("请输入正确的金额！");
+               return false;
+           }
+           if(costTime==""){
+               layer.alert("请选择时间！");
+               return false;
+           }
+           if(remarks!=null){
+               if(remarks.length>1000){
+                   layer.alert("请输入1000字以内的备注！");
+                   return false;
+               }
+           }
+           var ret = postData("/daily_cost/saveDailyCost",$("#form").serialize());
+           if(ret.code==200){
+               layer.msg("操作成功！");
+               layer.closeAll();
+               active.reload();
+               $("#form")[0].reset();
+           }else{
+               layer.alert(ret.msg);
+           }
+       });
+
+
+
+
+
+
+    });
+</script>
+</body>
+</html>

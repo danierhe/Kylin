@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <css th:replace="utils/meta-ui-inc::meta"></css>
+</head>
+<body>
+<div class="layui-container">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>百科详情
+            <a href="javascript:history.go(-1);" class="layui-btn layui--btn-sm">返回</a>
+        </legend>
+    </fieldset>
+    <input type="hidden" id="id" th:value="${id}">
+    <!-- 第一行 -->
+    <div class="layui-row" style="margin-top: 30px">
+        <div class="layui-col-xs9">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    <!--标题-->
+                    <div id="cyclName"></div>
+                </div>
+                <div class="layui-card-body">
+                    <!--简介-->
+                    <div id="selfDiv"></div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-xs3">
+            <!-- 图片 -->
+            <div id="photoDiv"></div>
+        </div>
+    </div>
+    <hr>
+    <!-- 第二行 -->
+    <div class="layui-row">
+        <!-- 目录 -->
+        <div class="layui-col-xs3">
+            <p style="font-size: 28px;color: #0000FF">目录</p>
+        </div>
+        <div class="layui-col-xs6">
+            <div id="cataloguesDiv"></div>
+        </div>
+        <div class="layui-col-xs3"></div>
+    </div>
+    <hr>
+    <!-- 第三行 -->
+    <div class="layui-row" style="margin-top: 60px">
+        <div id="detailDiv"></div>
+    </div>
+
+    <!-- 末尾 -->
+</div>
+
+
+<javascript th:replace="utils/js-inc::js"></javascript>
+<script>
+    layui.use(['layer','jquery','form','table'],function () {
+        var layer=layui.layer,$=layui.$,form=layui.form,table=layui.table;
+        var id=$("#id").val();
+        var ret = postData("/cyclopedias/getCyclopediasById",{"id":id});
+        if(ret.code==200){
+            var map = ret.data;
+            $("#cyclName").append(map.cyclopedias.name);
+            $("#selfDiv").append(map.cyclopedias.selfIntro);
+            $("#photoDiv").append('<img src="'+map.cyclopedias.photoUrl+'" style="width: 200px;height: 300px;">')
+            var catas = map.cyclopediasCataloguesList;
+            var details = map.detailsList;
+            if(catas.length>0){
+                var cataStr='';
+                var detailsStr='';
+                for(var i=0;i<catas.length;i++){
+                    cataStr+='<div class="layui-row">'+(i+1)+'、'+catas[i].name+'</div>';
+                    detailsStr+='<div class="layui-row">'+(i+1)+'、'+catas[i].name;
+                    for(var j=0;j<details.length;j++){
+                        if(details[j].catalogueId == catas[i].id){
+                            detailsStr+='<div class="layui-row" style="margin-top: 10px"><pre>'+details[j].content+'</pre></div><br>'
+                        }
+                    }
+                    detailsStr+='</div><br>';
+                }
+                $("#cataloguesDiv").append(cataStr);
+                $("#detailDiv").append(detailsStr);
+            }
+        }
+    })
+</script>
+</body>
+</html>

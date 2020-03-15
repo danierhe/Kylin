@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <css th:replace="utils/meta-ui-inc::meta"></css>
+</head>
+<body>
+<div class="layui-fluid" style="text-align: center">
+    <!-- 百科 -->
+    <div class="layui-row">
+        <div class="layui-col-md12">
+            <div class="grid-demo grid-demo-bg1" style="height: 6rem">
+                <p style="font-size: 40px">百&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;科</p>
+            </div>
+        </div>
+    </div>
+    <div class="layui-fluid layui-row" style="text-align: left;">
+        <a href="javascript:void(0);" class="layui-btn" onclick="toAdd();">新增百科</a>
+    </div>
+    <!-- 搜索 -->
+    <div class="layui-row">
+        <div class="layui-col-md12">
+            <div class="layui-inline">
+                <div class="layui-input-inline">
+                    <input class="layui-input" placeholder="请输入搜索内容" id="searchParam">
+                </div>
+                <div class="layui-input-inline">
+                    <input type="button" class="layui-btn" value="搜索" id="search">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 显示 -->
+<div class="layui-container" id="contentDiv" style="margin-top: 100px">
+
+    <pre>hello    老婆！</pre>
+    <!--<div class="layui-row">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    <a href="javascript:void(0);" title="点击查看详情" style="color: blue;font-size: 25px">张艳丽</a>
+                </div>
+                <div class="layui-card-body">
+                    张张张张张张张张张张张张张张张张张张张张张张张张张张张张张张张张张张张张
+                    张张张张张张张张张张张张张张张张张张张张张张张张张张张张张张张张张张张张
+                    张张张张张张张张张张张张张张张张张张张张张张张张张张张张张张张张张张张张
+                </div>
+            </div>
+        </div>
+    </div>-->
+
+</div>
+<javascript th:replace="utils/js-inc::js"></javascript>
+<script>
+    layui.use(['layer','jquery'],function () {
+        var layer = layui.layer,$=layui.$;
+
+        window.searchDetail = function(){
+            var keyword = $("#searchParam").val();
+            var ret = postData("/cyclopedias/selectByKeyWord",{"keyWord":keyword});
+            if(ret.code==200){
+                var list = ret.data;
+                var str='';
+                if(list.length>0){
+                    for(var i=0; i<list.length;i++){
+                        str+='<div class="layui-row">'
+                        str+='<div class="layui-col-md12">'
+                        str+='<div class="layui-card">'
+                        str+='<div class="layui-card-header">'
+                        str+='<a href="javascript:void(0);"  title="点击查看详情" style="color: blue;font-size: 25px" onclick="showDetail(\''+list[i].id+'\')">'+list[i].name+'</a>'
+                        str+='</div>'
+                        str+='<div class="layui-card-body">'+list[i].selfIntro+'</div>'
+                        str+='</div>'
+                        str+='</div>'
+                        str+='</div>'
+                        str+='<hr class="layui-bg-red">'
+                    }
+                }else{
+                    str+='<div style="font-size: 25px; text-align: center"><p>暂无数据</p></div>'
+                }
+                $("#contentDiv").empty();
+                $("#contentDiv").append(str);
+            }else{
+                layer.msg(ret.msg,{icon:2});
+            }
+        }
+
+        searchDetail();
+
+        $("#search").click(function () {
+            searchDetail();
+        });
+        window.showDetail = function(id){
+            href("/cyclopedias/to-cyclopedias-search-detail?id="+id);
+        }
+        window.toAdd = function () {
+            href("/cyclopedias/to-cyclopedias-search-create")
+        }
+    });
+</script>
+</body>
+</html>

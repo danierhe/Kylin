@@ -1,0 +1,426 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.invoice.mapper.InvoiceDetailMapper">
+  <resultMap id="BaseResultMap" type="com.example.demo.invoice.pojo.InvoiceDetail">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="list_id" jdbcType="VARCHAR" property="listId" />
+    <result column="invoice_number" jdbcType="VARCHAR" property="invoiceNumber" />
+    <result column="invoice_value" jdbcType="DECIMAL" property="invoiceValue" />
+    <result column="invoice_type" jdbcType="VARCHAR" property="invoiceType" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="business_type" jdbcType="VARCHAR" property="businessType" />
+    <result column="invoice_status" jdbcType="VARCHAR" property="invoiceStatus" />
+    <result column="eat_time" jdbcType="VARCHAR" property="eatTime" />
+    <result column="own_id" jdbcType="VARCHAR" property="ownId" />
+    <result column="own_name" jdbcType="VARCHAR" property="ownName" />
+    <result column="remarks" jdbcType="VARCHAR" property="remarks" />
+    <result column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="company_id" jdbcType="VARCHAR" property="companyId" />
+    <result column="create_time" jdbcType="VARCHAR" property="createTime" />
+    <result column="update_time" jdbcType="VARCHAR" property="updateTime" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, list_id, invoice_number, invoice_value, invoice_type, type, business_type, invoice_status, 
+    eat_time, own_id, own_name, remarks, user_id, company_id, create_time, update_time, 
+    status
+  </sql>
+  <select id="selectByExample" parameterType="com.example.demo.invoice.pojo.InvoiceDetailExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from invoice_detail
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from invoice_detail
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from invoice_detail
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.example.demo.invoice.pojo.InvoiceDetailExample">
+    delete from invoice_detail
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.example.demo.invoice.pojo.InvoiceDetail">
+    insert into invoice_detail (id, list_id, invoice_number, 
+      invoice_value, invoice_type, type, 
+      business_type, invoice_status, eat_time, 
+      own_id, own_name, remarks, 
+      user_id, company_id, create_time, 
+      update_time, status)
+    values (#{id,jdbcType=VARCHAR}, #{listId,jdbcType=VARCHAR}, #{invoiceNumber,jdbcType=VARCHAR}, 
+      #{invoiceValue,jdbcType=DECIMAL}, #{invoiceType,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, 
+      #{businessType,jdbcType=VARCHAR}, #{invoiceStatus,jdbcType=VARCHAR}, #{eatTime,jdbcType=VARCHAR}, 
+      #{ownId,jdbcType=VARCHAR}, #{ownName,jdbcType=VARCHAR}, #{remarks,jdbcType=VARCHAR}, 
+      #{userId,jdbcType=VARCHAR}, #{companyId,jdbcType=VARCHAR}, #{createTime,jdbcType=VARCHAR}, 
+      #{updateTime,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.demo.invoice.pojo.InvoiceDetail">
+    insert into invoice_detail
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="listId != null">
+        list_id,
+      </if>
+      <if test="invoiceNumber != null">
+        invoice_number,
+      </if>
+      <if test="invoiceValue != null">
+        invoice_value,
+      </if>
+      <if test="invoiceType != null">
+        invoice_type,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="businessType != null">
+        business_type,
+      </if>
+      <if test="invoiceStatus != null">
+        invoice_status,
+      </if>
+      <if test="eatTime != null">
+        eat_time,
+      </if>
+      <if test="ownId != null">
+        own_id,
+      </if>
+      <if test="ownName != null">
+        own_name,
+      </if>
+      <if test="remarks != null">
+        remarks,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="companyId != null">
+        company_id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="listId != null">
+        #{listId,jdbcType=VARCHAR},
+      </if>
+      <if test="invoiceNumber != null">
+        #{invoiceNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="invoiceValue != null">
+        #{invoiceValue,jdbcType=DECIMAL},
+      </if>
+      <if test="invoiceType != null">
+        #{invoiceType,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="businessType != null">
+        #{businessType,jdbcType=VARCHAR},
+      </if>
+      <if test="invoiceStatus != null">
+        #{invoiceStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="eatTime != null">
+        #{eatTime,jdbcType=VARCHAR},
+      </if>
+      <if test="ownId != null">
+        #{ownId,jdbcType=VARCHAR},
+      </if>
+      <if test="ownName != null">
+        #{ownName,jdbcType=VARCHAR},
+      </if>
+      <if test="remarks != null">
+        #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="companyId != null">
+        #{companyId,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.example.demo.invoice.pojo.InvoiceDetailExample" resultType="java.lang.Long">
+    select count(*) from invoice_detail
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update invoice_detail
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.listId != null">
+        list_id = #{record.listId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.invoiceNumber != null">
+        invoice_number = #{record.invoiceNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.invoiceValue != null">
+        invoice_value = #{record.invoiceValue,jdbcType=DECIMAL},
+      </if>
+      <if test="record.invoiceType != null">
+        invoice_type = #{record.invoiceType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.type != null">
+        type = #{record.type,jdbcType=VARCHAR},
+      </if>
+      <if test="record.businessType != null">
+        business_type = #{record.businessType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.invoiceStatus != null">
+        invoice_status = #{record.invoiceStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="record.eatTime != null">
+        eat_time = #{record.eatTime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ownId != null">
+        own_id = #{record.ownId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ownName != null">
+        own_name = #{record.ownName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remarks != null">
+        remarks = #{record.remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userId != null">
+        user_id = #{record.userId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.companyId != null">
+        company_id = #{record.companyId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateTime != null">
+        update_time = #{record.updateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update invoice_detail
+    set id = #{record.id,jdbcType=VARCHAR},
+      list_id = #{record.listId,jdbcType=VARCHAR},
+      invoice_number = #{record.invoiceNumber,jdbcType=VARCHAR},
+      invoice_value = #{record.invoiceValue,jdbcType=DECIMAL},
+      invoice_type = #{record.invoiceType,jdbcType=VARCHAR},
+      type = #{record.type,jdbcType=VARCHAR},
+      business_type = #{record.businessType,jdbcType=VARCHAR},
+      invoice_status = #{record.invoiceStatus,jdbcType=VARCHAR},
+      eat_time = #{record.eatTime,jdbcType=VARCHAR},
+      own_id = #{record.ownId,jdbcType=VARCHAR},
+      own_name = #{record.ownName,jdbcType=VARCHAR},
+      remarks = #{record.remarks,jdbcType=VARCHAR},
+      user_id = #{record.userId,jdbcType=VARCHAR},
+      company_id = #{record.companyId,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=VARCHAR},
+      update_time = #{record.updateTime,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.demo.invoice.pojo.InvoiceDetail">
+    update invoice_detail
+    <set>
+      <if test="listId != null">
+        list_id = #{listId,jdbcType=VARCHAR},
+      </if>
+      <if test="invoiceNumber != null">
+        invoice_number = #{invoiceNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="invoiceValue != null">
+        invoice_value = #{invoiceValue,jdbcType=DECIMAL},
+      </if>
+      <if test="invoiceType != null">
+        invoice_type = #{invoiceType,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="businessType != null">
+        business_type = #{businessType,jdbcType=VARCHAR},
+      </if>
+      <if test="invoiceStatus != null">
+        invoice_status = #{invoiceStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="eatTime != null">
+        eat_time = #{eatTime,jdbcType=VARCHAR},
+      </if>
+      <if test="ownId != null">
+        own_id = #{ownId,jdbcType=VARCHAR},
+      </if>
+      <if test="ownName != null">
+        own_name = #{ownName,jdbcType=VARCHAR},
+      </if>
+      <if test="remarks != null">
+        remarks = #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="companyId != null">
+        company_id = #{companyId,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.demo.invoice.pojo.InvoiceDetail">
+    update invoice_detail
+    set list_id = #{listId,jdbcType=VARCHAR},
+      invoice_number = #{invoiceNumber,jdbcType=VARCHAR},
+      invoice_value = #{invoiceValue,jdbcType=DECIMAL},
+      invoice_type = #{invoiceType,jdbcType=VARCHAR},
+      type = #{type,jdbcType=VARCHAR},
+      business_type = #{businessType,jdbcType=VARCHAR},
+      invoice_status = #{invoiceStatus,jdbcType=VARCHAR},
+      eat_time = #{eatTime,jdbcType=VARCHAR},
+      own_id = #{ownId,jdbcType=VARCHAR},
+      own_name = #{ownName,jdbcType=VARCHAR},
+      remarks = #{remarks,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=VARCHAR},
+      company_id = #{companyId,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <select id="getInvoiceDetailPage" parameterType="com.example.demo.invoice.pojo.InvoiceDetail" resultType="com.example.demo.invoice.pojo.InvoiceDetail">
+    select * from invoice_detail where status=1
+    <if test="detail!=null">
+      <if test="detail.listId!=null and detail.listId!=''">
+        and list_id =#{detail.listId}
+      </if>
+      <if test="detail.invoiceNumber!=null and detail.invoiceNumber!=''">
+        and invoice_number like concat('%',#{detail.invoiceNumber},'%')
+      </if>
+      <if test="detail.invoiceType!=null and detail.invoiceType!=''">
+        and invoice_type = #{detail.invoiceType}
+      </if>
+      <if test="detail.type!=null and detail.type!=''">
+        and type = #{detail.type}
+      </if>
+      <if test="detail.businessType!=null and detail.businessType!=''">
+        and business_type =#{detail.businessType}
+      </if>
+      <if test="detail.invoiceStatus!=null and detail.invoiceStatus!=''">
+        and invoice_status = #{detail.invoiceStatus}
+      </if>
+    </if>
+  </select>
+</mapper>

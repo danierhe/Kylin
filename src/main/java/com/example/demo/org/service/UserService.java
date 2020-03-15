@@ -1,8 +1,8 @@
 package com.example.demo.org.service;
 
 import com.example.demo.base.BaseService;
-import com.example.demo.org.mapper.UsersMapper;
-import com.example.demo.org.pojo.Users;
+import com.example.demo.org.mapper.UserMapper;
+import com.example.demo.org.pojo.User;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import commons.DateUtils;
@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+
 /**
  * @author DanierHe
  * @description
@@ -26,7 +27,7 @@ public class UserService extends BaseService {
     private Logger logger = LoggerFactory.getLogger(UserService.class);
 
     @Autowired
-    private UsersMapper usersMapper;
+    private UserMapper userMapper;
 
     /**
     * @Author: DanierHe
@@ -35,18 +36,18 @@ public class UserService extends BaseService {
     * @Param: [userId]
     * @return: com.example.demo.users.pojo.Users
     */
-    public Users getUserById(String userId){
+    public User getUserById(String userId){
         logger.info("========service=======");
-        Users user = usersMapper.selectByPrimaryKey(userId);
+        User user = userMapper.selectByPrimaryKey(userId);
         return user;
     }
 
-    public Users getUserByPhone(String phone) throws Exception{
-        return usersMapper.getUserByPhone(phone);
+    public User getUserByPhone(String phone) throws Exception{
+        return userMapper.getUserByPhone(phone);
     }
 
-    public Users getUserByEmail(String email) throws Exception{
-        return usersMapper.getUserByEmail(email);
+    public User getUserByEmail(String email) throws Exception{
+        return userMapper.getUserByEmail(email);
     }
 
 
@@ -58,10 +59,10 @@ public class UserService extends BaseService {
     * @return: java.lang.Integer
     */
     public Integer insertUser(){
-        Users users = new Users();
+        User users = new User();
         users.setId(System.currentTimeMillis()+"");
         users.setUserName("张三");
-        return usersMapper.insert(users);
+        return userMapper.insert(users);
     }
 
 
@@ -72,8 +73,8 @@ public class UserService extends BaseService {
     * @Param: [userName, password]
     * @return: com.example.demo.users.pojo.Users
     */
-    public Users getUserByUserNameAndPwd(String userName,String password) throws Exception{
-        return usersMapper.selectUserByUserName(userName,password);
+    public User getUserByUserNameAndPwd(String userName,String password){
+        return userMapper.selectUserByUserName(userName,password);
     }
 
 
@@ -83,11 +84,11 @@ public class UserService extends BaseService {
 
 
 
-    public PageBean<Users> getUserPage(PageBean<Users> pageBean,String searchParam){
+    public PageBean<User> getUserPage(PageBean<User> pageBean, String searchParam){
         //开启分页
         PageHelper.startPage(pageBean.getPage(),pageBean.getLimit());
-        List<Users> usersList = usersMapper.getUsersList();
-        PageInfo<Users> pageInfo = new PageInfo<>(usersList);
+        List<User> usersList = userMapper.getUsersList();
+        PageInfo<User> pageInfo = new PageInfo<>(usersList);
         pageBean.setCount((int) pageInfo.getTotal());
         pageBean.setData(usersList);
         return pageBean;
@@ -100,11 +101,11 @@ public class UserService extends BaseService {
     * @Param: [users]
     * @return: int
     */
-    public int saveUser(Users users) throws Exception{
+    public int saveUser(User users) throws Exception{
         users.setId(getKey("user"));
         users.setStatus(USABLE_STATUS);
         users.setUserStatus("1");
         users.setCreateTime(DateUtils.getYmdhms());
-        return usersMapper.insert(users);
+        return userMapper.insert(users);
     }
 }

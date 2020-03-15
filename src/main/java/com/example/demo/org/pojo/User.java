@@ -1,35 +1,77 @@
 package com.example.demo.org.pojo;
 
-/**
- * @author DanierHe
- * @description
- * @date 2019-12-17-12-17 15:53
- */
-public class Users {
+public class User {
     private String id;
+
     private String userCode;
+
     private String userName;
+
     private String phone;
+
     private String email;
+
     private String password;
+
     private String sex;
+
     private String birthday;
+
     private String roleId;
+
     private String deptId;
+
+    private String companyId;
+
     private String userStatus;
+
     private String photoUrl;
-    private String briefIntroduction;//个人简介
+
+    private String briefIntroduction;
+
     private String status;
+
     private String createTime;
+
     private String updateTime;
+
     private String lastLogintime;
+
+
+    private String companyName;
+    private String usetType;
+    private String authTree;
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public String getUsetType() {
+        return usetType;
+    }
+
+    public void setUsetType(String usetType) {
+        this.usetType = usetType;
+    }
+
+    public String getAuthTree() {
+        return authTree;
+    }
+
+    public void setAuthTree(String authTree) {
+        this.authTree = authTree;
+    }
 
     public String getId() {
         return id;
     }
 
     public void setId(String id) {
-        this.id = id;
+        this.id = id == null ? null : id.trim();
     }
 
     public String getUserCode() {
@@ -37,7 +79,7 @@ public class Users {
     }
 
     public void setUserCode(String userCode) {
-        this.userCode = userCode;
+        this.userCode = userCode == null ? null : userCode.trim();
     }
 
     public String getUserName() {
@@ -45,7 +87,7 @@ public class Users {
     }
 
     public void setUserName(String userName) {
-        this.userName = userName;
+        this.userName = userName == null ? null : userName.trim();
     }
 
     public String getPhone() {
@@ -53,7 +95,7 @@ public class Users {
     }
 
     public void setPhone(String phone) {
-        this.phone = phone;
+        this.phone = phone == null ? null : phone.trim();
     }
 
     public String getEmail() {
@@ -61,7 +103,7 @@ public class Users {
     }
 
     public void setEmail(String email) {
-        this.email = email;
+        this.email = email == null ? null : email.trim();
     }
 
     public String getPassword() {
@@ -69,7 +111,7 @@ public class Users {
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        this.password = password == null ? null : password.trim();
     }
 
     public String getSex() {
@@ -77,7 +119,7 @@ public class Users {
     }
 
     public void setSex(String sex) {
-        this.sex = sex;
+        this.sex = sex == null ? null : sex.trim();
     }
 
     public String getBirthday() {
@@ -85,7 +127,7 @@ public class Users {
     }
 
     public void setBirthday(String birthday) {
-        this.birthday = birthday;
+        this.birthday = birthday == null ? null : birthday.trim();
     }
 
     public String getRoleId() {
@@ -93,7 +135,7 @@ public class Users {
     }
 
     public void setRoleId(String roleId) {
-        this.roleId = roleId;
+        this.roleId = roleId == null ? null : roleId.trim();
     }
 
     public String getDeptId() {
@@ -101,7 +143,15 @@ public class Users {
     }
 
     public void setDeptId(String deptId) {
-        this.deptId = deptId;
+        this.deptId = deptId == null ? null : deptId.trim();
+    }
+
+    public String getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(String companyId) {
+        this.companyId = companyId == null ? null : companyId.trim();
     }
 
     public String getUserStatus() {
@@ -109,7 +159,7 @@ public class Users {
     }
 
     public void setUserStatus(String userStatus) {
-        this.userStatus = userStatus;
+        this.userStatus = userStatus == null ? null : userStatus.trim();
     }
 
     public String getPhotoUrl() {
@@ -117,7 +167,7 @@ public class Users {
     }
 
     public void setPhotoUrl(String photoUrl) {
-        this.photoUrl = photoUrl;
+        this.photoUrl = photoUrl == null ? null : photoUrl.trim();
     }
 
     public String getBriefIntroduction() {
@@ -125,7 +175,7 @@ public class Users {
     }
 
     public void setBriefIntroduction(String briefIntroduction) {
-        this.briefIntroduction = briefIntroduction;
+        this.briefIntroduction = briefIntroduction == null ? null : briefIntroduction.trim();
     }
 
     public String getStatus() {
@@ -133,7 +183,7 @@ public class Users {
     }
 
     public void setStatus(String status) {
-        this.status = status;
+        this.status = status == null ? null : status.trim();
     }
 
     public String getCreateTime() {
@@ -141,7 +191,7 @@ public class Users {
     }
 
     public void setCreateTime(String createTime) {
-        this.createTime = createTime;
+        this.createTime = createTime == null ? null : createTime.trim();
     }
 
     public String getUpdateTime() {
@@ -149,7 +199,7 @@ public class Users {
     }
 
     public void setUpdateTime(String updateTime) {
-        this.updateTime = updateTime;
+        this.updateTime = updateTime == null ? null : updateTime.trim();
     }
 
     public String getLastLogintime() {
@@ -157,6 +207,6 @@ public class Users {
     }
 
     public void setLastLogintime(String lastLogintime) {
-        this.lastLogintime = lastLogintime;
+        this.lastLogintime = lastLogintime == null ? null : lastLogintime.trim();
     }
 }
